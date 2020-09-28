@@ -1,8 +1,9 @@
 # XMPie-WSDL-Wrapper-Documentation
 **Documentation for the XMPie WSDL Wrapper Projects**
 This is the online documentation for the following 2 projects
-- XMPie-WSDL-Wrapper-uProduce
-- XMPie-WSDL-Wrapper-uStore
+- XMPie-WSDL-Wrapper-uProduce [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uProduce).
+- XMPie-WSDL-Wrapper-uStore (Coming Soon).  
+
 I have had to split the project into smaller parts as with each upgrade of uProduce and uStore,
 the code base became more and more unwieldy.
 
