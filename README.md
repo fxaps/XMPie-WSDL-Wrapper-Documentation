@@ -2,7 +2,7 @@
 **Documentation for the XMPie WSDL Wrapper Projects**
 This is the online documentation for the following 2 projects
 - XMPie-WSDL-Wrapper-uProduce [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uProduce).
-- XMPie-WSDL-Wrapper-uStore (Coming Soon).  
+- XMPie-WSDL-Wrapper-uStore [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uStore).  
 
 I have had to split the project into smaller parts as with each upgrade of uProduce and uStore,
 the code base became more and more unwieldy.
@@ -166,7 +166,7 @@ use XMPieWsdlClient\uStoreFactory;
 $xmpOptions =
     [
         'url' => 'https://127.0.0.1/',
-        'username' => 'some.user@example.com',
+        'username' => 'some.admin.user@example.com',
         'password' => '$secr3tP@ss',
     ];
 
@@ -199,8 +199,6 @@ $Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInCampaign
 It is important to note that the `$Request` Object above *does not* hold the data we are requesting from the API,
 it merely holds the request parameters in a format that is ready to send to a *Service*.
 
-> *TIP* Consult the `docs` folder for advanced examples and how to configure RequestFabricator().
-
 ### The *Service* Object
 To get the data, you need to employ the Service Object Class to process the `$Request` Object.
 
@@ -219,8 +217,6 @@ $Service = $ServiceFabricator->Campaign_SSP();
 ```
 
 Now that we have `$Request` and `$Service` instances, we can use then to get the XMPie Web Service.
-
-> *TIP* Consult the `docs` folder for advanced examples and how to configure ServiceFabricator().
 
 ### The *Response* Object
 There is no need to explicitly make a `$Response` instance - it's a product of calling a *Service*.
@@ -345,6 +341,72 @@ print_r($result);
 $Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInCampaignID(457);
 $result = $ServiceFabricator->Campaign_SSP()->GetAllProperties($Request)->getGetAllPropertiesResult();
 print_r($result);
+```
+
+## Full Simple Example for uStore
+Skipping the overly verbose example and going straight to the streamlined method chaining example:
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use XMPieWsdlClient\uStoreFactory;
+
+$xmpOptions =
+    [
+        'url' => 'https://127.0.0.1/',
+        'username' => 'some.admin.user@example.com',
+        'password' => '$secr3tP@ss',
+    ];
+
+$Factory = new uStoreFactory($xmpOptions);
+$RequestFabricator = $Factory->getUStoreRequestFabricator();
+$ServiceFabricator = $Factory->getUStoreServiceFabricator();
+
+$Request = $RequestFabricator->UserWS()->GetUserByEmail()->setEmail('Joe.Citizen@example.com');
+$result = $ServiceFabricator->UserWS()->GetUserByEmail($Request)->getGetUserByEmailResult();
+
+//If we print_r($result) we would get something like this...
+
+/*
+    XMPieWsdlClient\XMPie\uStore\v_12_1\WSAPI\UserWS\User Object
+        (
+            [UserID:protected] => 1005
+            [Login:protected] => Joe.Citizen@example.com
+            [FirstName:protected] => Joe
+            [LastName:protected] => Citizen
+            [Email:protected] => Joe.Citizen@example.com
+            [CreatedLoginSessionID:protected] => 1
+            [CreatedDate:protected] => 2014-04-29T11:25:52.84
+            [ModifiedLoginSessionID:protected] => 90503
+            [ModifiedDate:protected] => 2020-07-31T13:57:51.52
+            [StatusID:protected] => 1
+            [ExternalID:protected] =>
+            [PhoneNumber:protected] => 
+            [MobileNumber:protected] => 0400 000 000
+            [FaxNumber:protected] => 02 1234 5678
+            [CompanyName:protected] => FX
+            [Department:protected] => Sample
+            [JobTitle:protected] =>
+            [IsActivated:protected] => 1
+            [IsLocked:protected] =>
+            [AssignedToStoreID:protected] => 0
+            [GenderID:protected] => -1
+            [BirthDay:protected] => 0001-01-01T00:00:00
+            [Custom1:protected] =>
+            [Custom2:protected] =>
+            [Custom3:protected] =>
+            [Custom4:protected] =>
+            [Custom5:protected] =>
+        )
+*/
+
+//Because there are concrete classes that understand the response, we have access to methods such as the following... 
+print_r($result->getEmail());           //Joe.Citizen@example.com
+print_r($result->getFirstName());       //Joe
+print_r($result->getLastName());        //Citzen
+print_r($result->getMobileNumber());    //0400 000 000
+
+//If you had used plain old SOAP, you would be using DOMDocument to extract the information!!
 ```
 
 
