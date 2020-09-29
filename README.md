@@ -38,54 +38,43 @@ This project aims to support the latest versions of uStore and uProduce.
 
 | Application   | Versions                                                    | 
 | ------------- |-------------------------------------------------------------|
-| uStore        | 8.2.3 (more coming soon)|
-| uProduce      | Coming Soon!|
+| uStore      | 12.1|
+| uProduce        | 8.2.3, 9.8.2|
 
+Even if your specific version of uProduce or uStore is not in the supported list,
+pick the closet version as per the installation instructions below.
 
 ## Installation
-The recommended method of installation is via Composer.
+The recommended method of installation is via Composer, to use the latest version:
 
 ```json
 {
 "require": {
     "php": ">=7.0.0",
-    "fxaps/xmpie-wsdl-wrapper": "*"
+    "fxaps/xmpie-wsdl-wrapper-uproduce": "*",
+    "fxaps/xmpie-wsdl-wrapper-ustore": "*"
   }
 }
 ```
 
-## Basic Usage
-By including the RequestFabricator and ServiceFabricator into your code,
-you have the ability to access all XMPie Web Services via PHP method chaining.
+To install a specific version or a version closest to your version of uProduce/uStore 
+use the following examples:
+```code
+//uProduce
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:8.2.3.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:9.8.2.*
 
-```php
-<?php
-use XMPieWsdlClient\XMPie\uProduce\v_9_0_2\Fabricator\RequestFabricator;
-use XMPieWsdlClient\XMPie\uProduce\v_9_0_2\Fabricator\ServiceFabricator;
-
-$RequestFabricator = new RequestFabricator();
-$ServiceFabricator = new ServiceFabricator();
-
-$Request = $RequestFabricator->Licensing_SSP()->GetAvailableClicks()->setInUsername('amelia')->setInPassword('my$3cret');
-$Service = $ServiceFabricator->Licensing_SSP();
-$Response = $Service->GetAvailableClicks($Request);
-
-print_r($Response);
+//uStore
+composer require fxaps/xmpie-wsdl-wrapper-ustore:12.1.*
+composer require fxaps/xmpie-wsdl-wrapper-ustore:13.0.*
 ```
+You will notice that the version syntax is similar to that of uProduce/uStrore with an additional release number
+uProduce -  Major.Minor.Patch.Release
+uStore -  Major.Minor.Release
+The release number signifies a release of this package, i.e. if I need to update the generated code due to an issue.
+Leaving a star (*) in the composer require statement ensures you get the latest release of the package for your version
+of uProduce and uStore. 
 
-Make sure you load the right version of RequestFabricator and ServiceFabricator for your installation of uProduce and uStore.
-If you need to query the uProduce and uStore Web Services on the same page, don't forget to alias the namespaces.
-
-```php
-<?php
-//to query the uProduce API v9.4
-use XMPieWsdlClient\XMPie\uProduce\v_9_4\Fabricator\RequestFabricator as uProduceRequestFabricator;
-use XMPieWsdlClient\XMPie\uProduce\v_9_4\Fabricator\ServiceFabricator as uProduceServiceFabricator;
-
-//to query the uStore API v9.0.0
-use XMPieWsdlClient\XMPie\uStore\v_9_0\Fabricator\RequestFabricator as uStoreRequestFabricator;
-use XMPieWsdlClient\XMPie\uStore\v_9_0\Fabricator\ServiceFabricator as uStoreServiceFabricator;
-```
 
 ## Plain PHP SOAP vs XMPie-WSDL-Wrapper SOAP
 
@@ -143,30 +132,68 @@ Through XMPie-WSDL-Wrapper, you make use of **Request** and **Response** cycles 
 
 In other words, you create a **Request** which you send to a **Service** to get back a **Response**.
 
+## Starting with the Factory
+The easiest way to get and create **Requests** and **Services** is via the Factory.
+This also has the added benefit of passing in some setup parameters making your code reusable.
+
+**uProduce Factory**
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use XMPieWsdlClient\uProduceFactory;
+
+$xmpOptions =
+    [
+        'url' => '127.0.0.1',
+        'username' => 'admin',
+        'password' => 'admin',
+    ];
+
+$Factory = new uProduceFactory($xmpOptions);
+$RequestFabricator = $Factory->getUProduceRequestFabricator();
+$ServiceFabricator = $Factory->getUProduceServiceFabricator();
+```
+
+
+**uStore Factory**
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use XMPieWsdlClient\uStoreFactory;
+
+$xmpOptions =
+    [
+        'url' => 'https://127.0.0.1/',
+        'username' => 'some.user@example.com',
+        'password' => '$secr3tP@ss',
+    ];
+
+$Factory = new uStoreFactory($xmpOptions);
+$RequestFabricator = $Factory->getUStoreRequestFabricator();
+$ServiceFabricator = $Factory->getUStoreServiceFabricator();
+```
+
+Via the created ```$RequestFabricator``` and ```$ServiceFabricator``` you can now create the
+required *Request* and *Response* Objects.
 
 ### The *Request* Object
 Before you can get data, you need to format your request into a structure the Web Service understands. 
 Formatting the parameters - such as username, password and JobId - is the job of the Request Object Class.
-
-To create a instance of the Request Object Class:
-```php
-<?php
-use XMPieWsdlClient\XMPie\uProduce\v_9_0_2\Fabricator\RequestFabricator;
-$RequestFabricator = new RequestFabricator();
-```
 
 Through the instance `$RequestFabricator`, we can create a structured `$Request` Object for *any* XMPie Web Service.
 
 ```php
 <?php
 //I need some info about UserID 1...
-$Request = $RequestFabricator->User_SSP()->GetAllProperties()->setInUsername('amelia')->setInPassword('my$3cret')->setInUserID(1);
+$Request = $RequestFabricator->User_SSP()->GetAllProperties()->setInUserID(1);
 
 //I need all the messages from JobID 14809...
-$Request = $RequestFabricator->Job_SSP()->GetMessages()->setInUsername('amelia')->setInPassword('my$3cret')->setInJobID(14809);
+$Request = $RequestFabricator->Job_SSP()->GetMessages()->setInJobID(14809);
 
 //I need some information about CampaignID 457...
-$Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInUsername('amelia')->setInPassword('my$3cret')->setInCampaignID(457);
+$Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInCampaignID(457);
 ```
 
 It is important to note that the `$Request` Object above *does not* hold the data we are requesting from the API,
@@ -176,13 +203,6 @@ it merely holds the request parameters in a format that is ready to send to a *S
 
 ### The *Service* Object
 To get the data, you need to employ the Service Object Class to process the `$Request` Object.
-
-To create an instance of the Service Object Class:
-```php
-<?php
-use XMPieWsdlClient\XMPie\uProduce\v_9_0_2\Fabricator\ServiceFabricator;
-$ServiceFabricator = new ServiceFabricator();
-```
 
 Through the instance `$ServiceFabricator`, we can create a SoapClient `$Service` Object for *any* XMPie Web Service.
 
@@ -227,23 +247,28 @@ you can now work with `$result` in your PHP code.
 data-types that are returned from XMPie Web Services.
 
 
-## Full Simple Example
-
+## Full Simple Example for uProduce
+Here is an overly verbose example:
 ```php
 <?php
-use XMPieWsdlClient\XMPie\uProduce\v_9_0_2\Fabricator\RequestFabricator;
-use XMPieWsdlClient\XMPie\uProduce\v_9_0_2\Fabricator\ServiceFabricator;
+require __DIR__ . '/vendor/autoload.php';
 
-/*
- * Create instances of RequestFabricator and ServiceFabricator.
- * They can be used many times, as you will see below.
- */
-$RequestFabricator = new RequestFabricator();
-$ServiceFabricator = new ServiceFabricator();
+use XMPieWsdlClient\uProduceFactory;
+
+$xmpOptions =
+    [
+        'url' => '127.0.0.1',
+        'username' => 'admin',
+        'password' => 'admin',
+    ];
+
+$Factory = new uProduceFactory($xmpOptions);
+$RequestFabricator = $Factory->getUProduceRequestFabricator();
+$ServiceFabricator = $Factory->getUProduceServiceFabricator();
 
 
 //Call 1 - I need to know how many clicks I have left
-$Request = $RequestFabricator->Licensing_SSP()->GetAvailableClicks()->setInUsername('amelia')->setInPassword('my$3cret');
+$Request = $RequestFabricator->Licensing_SSP()->GetAvailableClicks();
 $Service = $ServiceFabricator->Licensing_SSP();
 $Response = $Service->GetAvailableClicks($Request);
 $result = $Response->getGetAvailableClicksResult();
@@ -251,7 +276,7 @@ print_r($result);
 
 
 //Call 2 - I need information about UserID 1
-$Request = $RequestFabricator->User_SSP()->GetAllProperties()->setInUsername('amelia')->setInPassword('my$3cret')->setInUserID(1);
+$Request = $RequestFabricator->User_SSP()->GetAllProperties()->setInUserID(1);
 $Service = $ServiceFabricator->User_SSP();
 $Response = $Service->GetAllProperties($Request);
 $result = $Response->getGetAllPropertiesResult();
@@ -259,7 +284,7 @@ print_r($result);
 
 
 //Call 3 - I need all the messages from JobID 14809...
-$Request = $RequestFabricator->Job_SSP()->GetMessages()->setInUsername('amelia')->setInPassword('my$3cret')->setInJobID(14809);
+$Request = $RequestFabricator->Job_SSP()->GetMessages()->setInJobID(14809);
 $Service = $ServiceFabricator->Job_SSP();
 $Response = $Service->GetMessages($Request);
 $result = $Response->getGetMessagesResult();
@@ -267,7 +292,7 @@ print_r($result);
 
 
 //Call 4 - I need some information about CampaignID 457...
-$Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInUsername('amelia')->setInPassword('my$3cret')->setInCampaignID(457);
+$Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInCampaignID(457);
 $Service = $ServiceFabricator->Campaign_SSP();
 $Response = $Service->GetAllProperties($Request);
 $result = $Response->getGetAllPropertiesResult();
@@ -279,14 +304,49 @@ In each of the calls above, you see the same 3 steps:
 2. Send the **Request** to a **Service** 
 3. Get back a **Response** (from which we extract the result and use in our PHP code).
 
-## Full Advanced Examples
-Refer to the `docs` folder in this project to see examples of:
-- Configuring the `RequestFabricator` on instantiation.  
-  - Auto-populating the `username` and `password` parameters
-- Configuring the `ServiceFabricator` on instantiation.  
-  - Configure `SoapClient` Options.
-  - Switch from `http://localhost` to other servers.
-- Ways to write even less code.
+Here is the same as above example, but using method chaining to save on a few lines:
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use XMPieWsdlClient\uProduceFactory;
+
+$xmpOptions =
+    [
+        'url' => '127.0.0.1',
+        'username' => 'admin',
+        'password' => 'admin',
+    ];
+
+$Factory = new uProduceFactory($xmpOptions);
+$RequestFabricator = $Factory->getUProduceRequestFabricator();
+$ServiceFabricator = $Factory->getUProduceServiceFabricator();
+
+
+//Call 1 - I need to know how many clicks I have left
+$Request = $RequestFabricator->Licensing_SSP()->GetAvailableClicks();
+$result = $ServiceFabricator->Licensing_SSP()->GetAvailableClicks($Request)->getGetAvailableClicksResult();
+print_r($result);
+
+
+//Call 2 - I need information about UserID 1
+$Request = $RequestFabricator->User_SSP()->GetAllProperties()->setInUserID(1);
+$result = $ServiceFabricator->User_SSP()->GetAllProperties($Request)->getGetAllPropertiesResult();
+print_r($result);
+
+
+//Call 3 - I need all the messages from JobID 14809...
+$Request = $RequestFabricator->Job_SSP()->GetMessages()->setInJobID(14809);
+$result = $ServiceFabricator->Job_SSP()->GetMessages($Request)->getGetMessagesResult();
+print_r($result);
+
+
+//Call 4 - I need some information about CampaignID 457...
+$Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInCampaignID(457);
+$result = $ServiceFabricator->Campaign_SSP()->GetAllProperties($Request)->getGetAllPropertiesResult();
+print_r($result);
+```
+
 
 ## Licensing, Support and Contributing
 **Licensing**  
