@@ -38,7 +38,7 @@ This project aims to support the latest versions of uStore and uProduce.
 
 | Application   | Versions                                                    | 
 | ------------- |-------------------------------------------------------------|
-| uStore      | 12.1|
+| uStore      | 12.1, 13.0|
 | uProduce        | 8.2.3, 9.8.2|
 
 Even if your specific version of uProduce or uStore is not in the supported list,
