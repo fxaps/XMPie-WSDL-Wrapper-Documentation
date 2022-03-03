@@ -39,7 +39,7 @@ This project aims to support the latest versions of uStore and uProduce.
 | Application   | Versions                                                    | 
 | ------------- |-------------------------------------------------------------|
 | uStore      | 12.1, 13.0|
-| uProduce        | 8.2.3, 9.8.2|
+| uProduce        | 8.2.3, 9.8.2, 10.1, 10.2.1, 11.2|
 
 Even if your specific version of uProduce or uStore is not in the supported list,
 pick the closet version as per the installation instructions below.
@@ -63,6 +63,9 @@ use the following examples:
 //uProduce
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:8.2.3.*
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:9.8.2.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:10.1.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:10.2.1.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:11.1.*
 
 //uStore
 composer require fxaps/xmpie-wsdl-wrapper-ustore:12.1.*
