@@ -1,13 +1,16 @@
 # XMPie-WSDL-Wrapper-Documentation
+
 **Documentation for the XMPie WSDL Wrapper Projects**
 This is the online documentation for the following 2 projects
-- XMPie-WSDL-Wrapper-uProduce [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uProduce).
-- XMPie-WSDL-Wrapper-uStore [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uStore).  
 
-I have had to split the project into smaller parts as with each upgrade of uProduce and uStore,
-the code base became more and more unwieldy.
+- XMPie-WSDL-Wrapper-uProduce [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uProduce).
+- XMPie-WSDL-Wrapper-uStore [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uStore).
+
+I have had to split the project into smaller parts as with each upgrade of uProduce and uStore, the code base became
+more and more unwieldy.
 
 ## Table of Contents
+
 - [Purpose](#purpose)
 - [Supported XMPie Applications and Versions](#supported-xmpie-applications-and-versions)
 - [Installation](#installation)
@@ -18,38 +21,38 @@ the code base became more and more unwieldy.
 - [Full Advanced Examples](#full-advanced-examples)
 - [Licensing, Support and Contributing](#licensing-support-and-contributing)
 
-
-
 ## Purpose
-XMPie provides an Application Programming Interface (API) as a way to interact with 
-the uStore and uProduce Applications. The API is available in the form of Microsoft Web Services.
-Microsoft Web Services are based on a core set of standards, describing the syntax and semantics of software communication:
 
-- Extensible Markup Language (XML) - provides the common syntax for representing data 
-- Simple Object Access Protocol (SOAP) - provides the semantics for data exchange  
-- Web Services Description Language (WSDL) - provides a mechanism for describing the capabilities of a Web service 
+XMPie provides an Application Programming Interface (API) as a way to interact with the uStore and uProduce
+Applications. The API is available in the form of Microsoft Web Services. Microsoft Web Services are based on a core set
+of standards, describing the syntax and semantics of software communication:
+
+- Extensible Markup Language (XML) - provides the common syntax for representing data
+- Simple Object Access Protocol (SOAP) - provides the semantics for data exchange
+- Web Services Description Language (WSDL) - provides a mechanism for describing the capabilities of a Web service
 
 The project provides a PHP Wrapper to the XMPie Web Services, thus providing an Object Oriented Programming (OOP)
 methodology to interact with the XMPie Web Services.
 
-
 ## Supported XMPie Applications and Versions
+
 This project aims to support the latest versions of uStore and uProduce.
 
 | Application   | Versions                                                    | 
 | ------------- |-------------------------------------------------------------|
 | uStore      | 12.1, 13.0, 13.4, 14.0|
-| uProduce        | 8.2.3, 9.8.2, 10.1, 10.2.1, 11.2|
+| uProduce        | 8.2.3, 9.8.2, 10.1, 10.2.1, 11.2, 12.0|
 
-Even if your specific version of uProduce or uStore is not in the supported list,
-pick the closet version as per the installation instructions below.
+Even if your specific version of uProduce or uStore is not in the supported list, pick the closet version as per the
+installation instructions below.
 
 ## Installation
+
 The recommended method of installation is via Composer, to use the latest version:
 
 ```json
 {
-"require": {
+  "require": {
     "php": ">=7.0.0",
     "fxaps/xmpie-wsdl-wrapper-uproduce": "*",
     "fxaps/xmpie-wsdl-wrapper-ustore": "*"
@@ -57,8 +60,8 @@ The recommended method of installation is via Composer, to use the latest versio
 }
 ```
 
-To install a specific version or a version closest to your version of uProduce/uStore 
-use the following examples:
+To install a specific version or a version closest to your version of uProduce/uStore use the following examples:
+
 ```code
 //uProduce
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:8.2.3.*
@@ -73,19 +76,19 @@ composer require fxaps/xmpie-wsdl-wrapper-ustore:13.0.*
 composer require fxaps/xmpie-wsdl-wrapper-ustore:13.4.*
 composer require fxaps/xmpie-wsdl-wrapper-ustore:14.0.*
 ```
-You will notice that the version syntax is similar to that of uProduce/uStrore with an additional release number
-uProduce -  Major.Minor.Patch.Release
-uStore -  Major.Minor.Release
-The release number signifies a release of this package, i.e. if I need to update the generated code due to an issue.
-Leaving a star (*) in the composer require statement ensures you get the latest release of the package for your version
-of uProduce and uStore. 
 
+You will notice that the version syntax is similar to that of uProduce/uStore with an additional release number uProduce
+
+- Major.Minor.Patch.Release uStore - Major.Minor.Release The release number signifies a release of this package, i.e. if
+  I need to update the generated code due to an issue. Leaving a star (*) in the composer require statement ensures you
+  get the latest release of the package for your version of uProduce and uStore.
 
 ## Plain PHP SOAP vs XMPie-WSDL-Wrapper SOAP
 
 ### Plain PHP SOAP
-To interact with the XMPie Web Service (or any SOAP Service) you could use the
-built in PHP SoapClient class, similar to the following:
+
+To interact with the XMPie Web Service (or any SOAP Service) you could use the built in PHP SoapClient class, similar to
+the following:
 
 ```php
 <?php
@@ -100,20 +103,21 @@ print_r($result);
 
 There biggest drawbacks of the above are:
 
-1. **Missing Methods.** Methods are marked as missing in IDE's such a PhpStorm or WebStorm. See `GetAvailableClicks` in the image below.
-   Missing methods are due to the fact that SoapClient uses a lot of magic methods - methods which are hard to debug.  
+1. **Missing Methods.** Methods are marked as missing in IDE's such a PhpStorm or WebStorm. See `GetAvailableClicks` in
+   the image below. Missing methods are due to the fact that SoapClient uses a lot of magic methods - methods which are
+   hard to debug.  
    ![Missing Method](https://github.com/fxaps/XMPie-WSDL-Wrapper/blob/master/docs/images/MissingMethod.png?raw=true)
-   
-2. **No type hinting.** You can probably guess that `inUsername` should be a string
-   but what about more obscure parameters such as `inProps` or `inMacTypeHex`?
-   Is that a String, Array or Int?
 
-3. **No code completion.** Constantly referring to the API documentation to get the exact spelling and case can be
-   a tedious process. Was that `CreateNewFromCPKG` or `CreateNewFromCpkg`?
+2. **No type hinting.** You can probably guess that `inUsername` should be a string but what about more obscure
+   parameters such as `inProps` or `inMacTypeHex`? Is that a String, Array or Int?
+
+3. **No code completion.** Constantly referring to the API documentation to get the exact spelling and case can be a
+   tedious process. Was that `CreateNewFromCPKG` or `CreateNewFromCpkg`?
 
 ### XMPie-WSDL-Wrapper SOAP
-1. **No Missing Methods.** XMPie-WSDL-Wrapper replaces SoapClient magic methods
-   with concrete Classe, Methods and Properties.
+
+1. **No Missing Methods.** XMPie-WSDL-Wrapper replaces SoapClient magic methods with concrete Classe, Methods and
+   Properties.
 
 2. **Type hinting.** All class methods and properties are properly DocBlocked (e.g. `@var ArrayOfProperty $inProps`) so
    you can be sure of passing the expected variable type.
@@ -122,26 +126,62 @@ There biggest drawbacks of the above are:
 
 4. **Method chaining.** Familiarise yourself with method chaining to make your code more readable and efficient.
 
-
 ## Concepts
+
 XMPie-WSDL-Wrapper is based on the work of [wsdl2phpgenerator](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator).
-The wsdl2phpgenerator utility is used to generate PHP Classes, Methods and Properties from the XMPie Web Services.
-Those resulting PHP Classes are wrapped by XMPie-WSDL-Wrapper to provide an easy and simple way to
-access **any** of the XMPie Web Services through a common interface.
+The wsdl2phpgenerator utility is used to generate PHP Classes, Methods and Properties from the XMPie Web Services. Those
+resulting PHP Classes are wrapped by XMPie-WSDL-Wrapper to provide an easy and simple way to access **any** of the XMPie
+Web Services through a common interface.
 
 Through XMPie-WSDL-Wrapper, you make use of **Request** and **Response** cycles via a **Service**.
 
-- **Request:** The parameters of the data you are requesting. 
+- **Request:** The parameters of the data you are requesting.
 - **Service:** This API that will serve you the data.
 - **Response:** The data you asked for in your Request.
 
 In other words, you create a **Request** which you send to a **Service** to get back a **Response**.
 
 ## Starting with the Factory
-The easiest way to get and create **Requests** and **Services** is via the Factory.
-This also has the added benefit of passing in some setup parameters making your code reusable.
+
+The easiest way to get and create **Requests** and **Services** is via the Factory. This also has the added benefit of
+passing in some setup parameters making your code reusable.
+
+**Configuring the Factory**
+
+When instantiating a Factory, you can pass it 3 sets configuration values.
+
+1) XMPie Options - URL, Username and Password
+2) SOAP Options - In case the SOAP options that PHP uses need to be modified for your server
+3) General Config - Other configuration option
+
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+use XMPieWsdlClient\uProduceFactory;
+
+//basic options, in most cases these are the only options you need to set
+$xmpOptions =
+    [
+        'url' => '127.0.0.1',
+        'username' => 'admin',
+        'password' => 'admin',
+    ];
+
+//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
+//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
+$soapOptions = [];
+
+//Configure other options (at present only 1 other option to configure)
+$config = [
+    'security' => false //setting this to false will allow the use of self-signed SSL certificates
+];
+
+$Factory = new uProduceFactory($xmpOptions, $soapOptions, $config);
+```
 
 **uProduce Factory**
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -150,7 +190,7 @@ use XMPieWsdlClient\uProduceFactory;
 
 $xmpOptions =
     [
-        'url' => '127.0.0.1',
+        'url' => '127.0.0.1', //will always use https unless you specifically set 'http://127.0.0.1'
         'username' => 'admin',
         'password' => 'admin',
     ];
@@ -160,8 +200,8 @@ $RequestFabricator = $Factory->getUProduceRequestFabricator();
 $ServiceFabricator = $Factory->getUProduceServiceFabricator();
 ```
 
-
 **uStore Factory**
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -180,12 +220,13 @@ $RequestFabricator = $Factory->getUStoreRequestFabricator();
 $ServiceFabricator = $Factory->getUStoreServiceFabricator();
 ```
 
-Via the created ```$RequestFabricator``` and ```$ServiceFabricator``` you can now create the
-required *Request* and *Response* Objects.
+Via the created ```$RequestFabricator``` and ```$ServiceFabricator``` you can now create the required *Request* and *
+Response* Objects.
 
 ### The *Request* Object
-Before you can get data, you need to format your request into a structure the Web Service understands. 
-Formatting the parameters - such as username, password and JobId - is the job of the Request Object Class.
+
+Before you can get data, you need to format your request into a structure the Web Service understands. Formatting the
+parameters - such as username, password and JobId - is the job of the Request Object Class.
 
 Through the instance `$RequestFabricator`, we can create a structured `$Request` Object for *any* XMPie Web Service.
 
@@ -201,10 +242,11 @@ $Request = $RequestFabricator->Job_SSP()->GetMessages()->setInJobID(14809);
 $Request = $RequestFabricator->Campaign_SSP()->GetAllProperties()->setInCampaignID(457);
 ```
 
-It is important to note that the `$Request` Object above *does not* hold the data we are requesting from the API,
-it merely holds the request parameters in a format that is ready to send to a *Service*.
+It is important to note that the `$Request` Object above *does not* hold the data we are requesting from the API, it
+merely holds the request parameters in a format that is ready to send to a *Service*.
 
 ### The *Service* Object
+
 To get the data, you need to employ the Service Object Class to process the `$Request` Object.
 
 Through the instance `$ServiceFabricator`, we can create a SoapClient `$Service` Object for *any* XMPie Web Service.
@@ -224,6 +266,7 @@ $Service = $ServiceFabricator->Campaign_SSP();
 Now that we have `$Request` and `$Service` instances, we can use then to get the XMPie Web Service.
 
 ### The *Response* Object
+
 There is no need to explicitly make a `$Response` instance - it's a product of calling a *Service*.
 
 ```php
@@ -241,15 +284,16 @@ $Response = $Service->GetAllProperties($Request);
 $result = $Response->getGetAllPropertiesResult();
 print_r($result);
 ```
-The variable `$result` contains the all the properties of the requested user and
-you can now work with `$result` in your PHP code.
 
-> *TIP* Consult the `docs` folder for advanced examples on how to work with the
-data-types that are returned from XMPie Web Services.
+The variable `$result` contains the all the properties of the requested user and you can now work with `$result` in your
+PHP code.
 
+> *TIP* Consult the `docs` folder for advanced examples on how to work with the data-types that are returned from XMPie Web Services.
 
 ## Full Simple Example for uProduce
+
 Here is an overly verbose example:
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -301,11 +345,13 @@ print_r($result);
 ```
 
 In each of the calls above, you see the same 3 steps:
-1. Create a **Request** 
-2. Send the **Request** to a **Service** 
+
+1. Create a **Request**
+2. Send the **Request** to a **Service**
 3. Get back a **Response** (from which we extract the result and use in our PHP code).
 
 Here is the same as above example, but using method chaining to save on a few lines:
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -349,7 +395,9 @@ print_r($result);
 ```
 
 ## Full Simple Example for uStore
+
 Skipping the overly verbose example and going straight to the streamlined method chaining example:
+
 ```php
 <?php
 require __DIR__ . '/vendor/autoload.php';
@@ -414,26 +462,27 @@ print_r($result->getMobileNumber());    //0400 000 000
 //If you had used plain old SOAP, you would be using DOMDocument to extract the information!!
 ```
 
-
 ## Licensing, Support and Contributing
-**Licensing**  
-This project is licensed under the MIT License - you are free to use the code in this project
-under the terms of this [License](https://github.com/fxaps/XMPie-WSDL-Wrapper/blob/master/LICENSE).
 
-Please note however, the XMPie SDK (and associated code samples) are licensed products from XMPie.
-Consult your local [XMPie Dealer](www.xmpie.com) to make a purchase.
+**Licensing**  
+This project is licensed under the MIT License - you are free to use the code in this project under the terms of
+this [License](https://github.com/fxaps/XMPie-WSDL-Wrapper/blob/master/LICENSE).
+
+Please note however, the XMPie SDK (and associated code samples) are licensed products from XMPie. Consult your
+local [XMPie Dealer](www.xmpie.com) to make a purchase.
 
 **Support**  
-Because the XMPie SDK is a licensed product, any requests to 'help me do something' will be ignored. 
-An example of what will be ignored:
+Because the XMPie SDK is a licensed product, any requests to 'help me do something' will be ignored. An example of what
+will be ignored:
+
 - Can you please show me how to execute an InDesign Document?
 - How do I get the download path of a Job?
 - How do I upload a Campaign into the Dashboard?
 
 **Contributing**  
-If there is a bug in the code, please raise an [issue](https://github.com/fxaps/XMPie-WSDL-Wrapper/issues).
-Because this project uses a code generation utility, I cannot accept pull requests as the
-next round of code generation would overwrite the pull request.
-Please raise an [issue](https://github.com/fxaps/XMPie-WSDL-Wrapper/issues) so that I can fix the code generation utility.
-If you would like to contribute to the code generation utility, I can add you to the private project.
+If there is a bug in the code, please raise an [issue](https://github.com/fxaps/XMPie-WSDL-Wrapper/issues). Because this
+project uses a code generation utility, I cannot accept pull requests as the next round of code generation would
+overwrite the pull request. Please raise an [issue](https://github.com/fxaps/XMPie-WSDL-Wrapper/issues) so that I can
+fix the code generation utility. If you would like to contribute to the code generation utility, I can add you to the
+private project.
 
