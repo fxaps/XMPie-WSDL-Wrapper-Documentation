@@ -38,10 +38,10 @@ methodology to interact with the XMPie Web Services.
 
 This project aims to support the latest versions of uStore and uProduce.
 
-| Application   | Versions                                     | 
-| ------------- |----------------------------------------------|
-| uStore      | 12.1, 13.0, 13.4, 14.0                       |
-| uProduce        | 8.2.3, 9.8.2, 10.1, 10.2.1, 11.2, 12.0, 12.2 |
+| Application | Versions                               | 
+|-------------|----------------------------------------|
+| uStore      | 12.1, 13.0, 13.4, 14.0, 15.0, 17.2     |
+| uProduce    | 8.2.3, 9.8.2, 10.2.1, 11.2, 12.2, 13.2 |
 
 Even if your specific version of uProduce or uStore is not in the supported list, pick the closet version as per the
 installation instructions below.
@@ -64,18 +64,19 @@ To install a specific version or a version closest to your version of uProduce/u
 
 ```code
 //uProduce
-composer require fxaps/xmpie-wsdl-wrapper-uproduce:8.2.3.*
-composer require fxaps/xmpie-wsdl-wrapper-uproduce:9.8.2.*
-composer require fxaps/xmpie-wsdl-wrapper-uproduce:10.1.*
-composer require fxaps/xmpie-wsdl-wrapper-uproduce:10.2.1.*
-composer require fxaps/xmpie-wsdl-wrapper-uproduce:11.1.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:8.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:9.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:10.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:11.*
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:12.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:13.*
 
 //uStore
-composer require fxaps/xmpie-wsdl-wrapper-ustore:12.1.*
-composer require fxaps/xmpie-wsdl-wrapper-ustore:13.0.*
-composer require fxaps/xmpie-wsdl-wrapper-ustore:13.4.*
-composer require fxaps/xmpie-wsdl-wrapper-ustore:14.0.*
+composer require fxaps/xmpie-wsdl-wrapper-ustore:12.*
+composer require fxaps/xmpie-wsdl-wrapper-ustore:13.*
+composer require fxaps/xmpie-wsdl-wrapper-ustore:14.*
+composer require fxaps/xmpie-wsdl-wrapper-ustore:15.*
+composer require fxaps/xmpie-wsdl-wrapper-ustore:17.*
 ```
 
 You will notice that the version syntax is similar to that of uProduce/uStore with an additional release number uProduce
@@ -289,7 +290,8 @@ print_r($result);
 The variable `$result` contains the all the properties of the requested user and you can now work with `$result` in your
 PHP code.
 
-> *TIP* Consult the `docs` folder for advanced examples on how to work with the data-types that are returned from XMPie Web Services.
+> *TIP* Consult the `docs` folder for advanced examples on how to work with the data-types that are returned from XMPie
+> Web Services.
 
 ## Full Simple Example for uProduce
 
