@@ -6,8 +6,8 @@ This is the online documentation for the following 2 projects
 - XMPie-WSDL-Wrapper-uProduce [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uProduce).
 - XMPie-WSDL-Wrapper-uStore [Located Here](https://github.com/fxaps/XMPie-WSDL-Wrapper-uStore).
 
-I have had to split the project into smaller parts as with each upgrade of uProduce and uStore, the code base became
-more and more unwieldy.
+I have had to split the project into smaller parts as with each upgrade of uProduce and uStore,
+the code base became more and more unwieldy.
 
 ## Table of Contents
 
@@ -31,12 +31,13 @@ of standards, describing the syntax and semantics of software communication:
 - Simple Object Access Protocol (SOAP) - provides the semantics for data exchange
 - Web Services Description Language (WSDL) - provides a mechanism for describing the capabilities of a Web service
 
-The project provides a PHP Wrapper to the XMPie Web Services, thus providing an Object Oriented Programming (OOP)
+The project provides a PHP Wrapper to the XMPie Web Services, thus providing an Object-Oriented Programming (OOP)
 methodology to interact with the XMPie Web Services.
 
 ## Supported XMPie Applications and Versions
 
-This project aims to support the latest versions of uStore and uProduce.
+This project aims to support the latest versions of uStore and uProduce WSDL API.
+NOTE: uProduce now support a RESTful API. Consult your local Professional Services Analyst for details.
 
 | Application | Versions                               | 
 |-------------|----------------------------------------|
@@ -89,7 +90,7 @@ You will notice that the version syntax is similar to that of uProduce/uStore wi
 
 ### Plain PHP SOAP
 
-To interact with the XMPie Web Service (or any SOAP Service) you could use the built in PHP SoapClient class, similar to
+To interact with the XMPie Web Service (or any SOAP Service) you could use the built-in PHP SoapClient class, similar to
 the following:
 
 ```php
@@ -103,7 +104,7 @@ $result = $licensingService->GetAvailableClicks($p);
 print_r($result);
 ```
 
-There biggest drawbacks of the above are:
+The biggest drawbacks of the above are:
 
 1. **Missing Methods.** Methods are marked as missing in IDE's such a PhpStorm or WebStorm. See `GetAvailableClicks` in
    the image below. Missing methods are due to the fact that SoapClient uses a lot of magic methods - methods which are
@@ -118,7 +119,7 @@ There biggest drawbacks of the above are:
 
 ### XMPie-WSDL-Wrapper SOAP
 
-1. **No Missing Methods.** XMPie-WSDL-Wrapper replaces SoapClient magic methods with concrete Classe, Methods and
+1. **No Missing Methods.** XMPie-WSDL-Wrapper replaces SoapClient magic methods with concrete Classes, Methods and
    Properties.
 
 2. **Type hinting.** All class methods and properties are properly DocBlocked (e.g. `@var ArrayOfProperty $inProps`) so
@@ -145,7 +146,7 @@ In other words, you create a **Request** which you send to a **Service** to get 
 
 ## Starting with the Factory
 
-The easiest way to get and create **Requests** and **Services** is via the Factory. This also has the added benefit of
+The easiest way to get and create **Requests** and **Services** is via the **Factory**. This also has the added benefit of
 passing in some setup parameters making your code reusable.
 
 **Configuring the Factory**
@@ -155,32 +156,6 @@ When instantiating a Factory, you can pass it 3 sets configuration values.
 1) XMPie Options - URL, Username and Password
 2) SOAP Options - In case the SOAP options that PHP uses need to be modified for your server
 3) General Config - Other configuration option
-
-```php
-<?php
-require __DIR__ . '/vendor/autoload.php';
-
-use XMPieWsdlClient\uProduceFactory;
-
-//basic options, in most cases these are the only options you need to set
-$xmpOptions =
-    [
-        'url' => '127.0.0.1',
-        'username' => 'admin',
-        'password' => 'admin',
-    ];
-
-//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
-//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
-$soapOptions = [];
-
-//Configure other options (at present only 1 other option to configure)
-$config = [
-    'security' => false //setting this to false will allow the use of self-signed SSL certificates
-];
-
-$Factory = new uProduceFactory($xmpOptions, $soapOptions, $config);
-```
 
 **uProduce Factory**
 
@@ -197,7 +172,16 @@ $xmpOptions =
         'password' => 'admin',
     ];
 
-$Factory = new uProduceFactory($xmpOptions);
+//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
+//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
+$soapOptions = [];
+
+//Configure other options (at present only 1 other option to configure)
+$config = [
+    'security' => false //setting this to false will allow the use of self-signed SSL certificates
+];
+
+$Factory = new uProduceFactory($xmpOptions, $soapOptions, $config);
 $RequestFabricator = $Factory->getUProduceRequestFabricator();
 $ServiceFabricator = $Factory->getUProduceServiceFabricator();
 ```
@@ -217,7 +201,16 @@ $xmpOptions =
         'password' => '$secr3tP@ss',
     ];
 
-$Factory = new uStoreFactory($xmpOptions);
+//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
+//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
+$soapOptions = [];
+
+//Configure other options (at present only 1 other option to configure)
+$config = [
+    'security' => false //setting this to false will allow the use of self-signed SSL certificates
+];
+
+$Factory = new uStoreFactory($xmpOptions, $soapOptions, $config);
 $RequestFabricator = $Factory->getUStoreRequestFabricator();
 $ServiceFabricator = $Factory->getUStoreServiceFabricator();
 ```
@@ -305,10 +298,19 @@ use XMPieWsdlClient\uProduceFactory;
 
 $xmpOptions =
     [
-        'url' => '127.0.0.1',
+        'url' => '127.0.0.1', //will always use https unless you specifically set 'http://127.0.0.1'
         'username' => 'admin',
         'password' => 'admin',
     ];
+
+//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
+//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
+$soapOptions = [];
+
+//Configure other options (at present only 1 other option to configure)
+$config = [
+    'security' => false //setting this to false will allow the use of self-signed SSL certificates
+];
 
 $Factory = new uProduceFactory($xmpOptions);
 $RequestFabricator = $Factory->getUProduceRequestFabricator();
@@ -368,6 +370,15 @@ $xmpOptions =
         'password' => 'admin',
     ];
 
+//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
+//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
+$soapOptions = [];
+
+//Configure other options (at present only 1 other option to configure)
+$config = [
+    'security' => false //setting this to false will allow the use of self-signed SSL certificates
+];
+
 $Factory = new uProduceFactory($xmpOptions);
 $RequestFabricator = $Factory->getUProduceRequestFabricator();
 $ServiceFabricator = $Factory->getUProduceServiceFabricator();
@@ -413,6 +424,15 @@ $xmpOptions =
         'username' => 'some.admin.user@example.com',
         'password' => '$secr3tP@ss',
     ];
+
+//Refer to https://php.net/manual/en/soapclient.construct.php to see how to configure a SOAP Client
+//The array will be passed into the second parameter ($options) of  SoapClient::__construct(?string $wsdl, array $options = [])
+$soapOptions = [];
+
+//Configure other options (at present only 1 other option to configure)
+$config = [
+    'security' => false //setting this to false will allow the use of self-signed SSL certificates
+];
 
 $Factory = new uStoreFactory($xmpOptions);
 $RequestFabricator = $Factory->getUStoreRequestFabricator();
