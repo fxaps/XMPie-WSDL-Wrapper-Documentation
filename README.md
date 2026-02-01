@@ -39,10 +39,10 @@ methodology to interact with the XMPie Web Services.
 This project aims to support the latest versions of uStore and uProduce WSDL API.
 NOTE: uProduce now support a RESTful API. Consult your local Professional Services Analyst for details.
 
-| Application | Versions                               | 
-|-------------|----------------------------------------|
-| uStore      | 12.1, 13.0, 13.4, 14.0, 15.0, 17.2     |
-| uProduce    | 8.2.3, 9.8.2, 10.2.1, 11.2, 12.2, 13.2 |
+| Application | Versions                                       | 
+|-------------|------------------------------------------------|
+| uStore      | 12.1, 13.0, 13.4, 14.0, 15.0, 17.2             |
+| uProduce    | 8.2.3, 9.8.2, 10.2.1, 11.2, 12.2, 13.2, 25, 26 |
 
 Even if your specific version of uProduce or uStore is not in the supported list, pick the closet version as per the
 installation instructions below.
@@ -71,6 +71,8 @@ composer require fxaps/xmpie-wsdl-wrapper-uproduce:10.*
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:11.*
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:12.*
 composer require fxaps/xmpie-wsdl-wrapper-uproduce:13.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:25.*
+composer require fxaps/xmpie-wsdl-wrapper-uproduce:26.*
 
 //uStore
 composer require fxaps/xmpie-wsdl-wrapper-ustore:12.*
